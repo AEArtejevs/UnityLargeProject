@@ -9,7 +9,14 @@ public class Bullet : MonoBehaviour
         {
             // Destroy the enemy object
             print("Enemy hit!");
-            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
+
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            // Destroy the wall object
+            print("Wall hit!");
+            Destroy(gameObject);
         }
         // Destroy the bullet after it collides with any object
         // Destroy(gameObject);
