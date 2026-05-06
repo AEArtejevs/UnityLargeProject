@@ -1,72 +1,109 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
+// -------------------------------------------------------
+// THIS SCRIPT USES THE OLD INPUT SYSTEM
+// -------------------------------------------------------
+
+[RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    private CharacterController controller;
+
     [Header("Movement")]
-    public float moveSpeed = 5f;
-    public float sprintSpeed = 8f;
+    public float speed = 12f;
+    public float sprintSpeed = 18f;
 
     [Header("Jumping")]
-    public float jumpForce = 5f;
-    public float groundCheckDistance = 1.1f;
+    public float jumpHeight = 3f;
+    public float gravity = -9.81f * 2f;
 
-    private Rigidbody rb;
-    private Vector3 movement;
+    [Header("Ground Check")]
+    public Transform groundCheck;
+    public float groundDistance = 0.4f;
+    public LayerMask groundMask;
+
+    private Vector3 velocity;
     private bool isSprinting;
+    private bool isGrounded;
+    private bool isMoving;
+
+    private Vector3 lastPosition = Vector3.zero;
+
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        controller = GetComponent<CharacterController>();
     }
 
     void Update()
     {
-        Vector2 input = Vector2.zero;
+        CheckGround();
+        Sprint();
+        MovePlayer();
+        Jump();
+        ApplyGravity();
+        CheckMovement();
+    }
 
-        if (Keyboard.current.wKey.isPressed)
-            input.y += 1;
+    void CheckGround()
+    {
+        // Checks if the GroundCheck object is touching the ground layer.
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if (Keyboard.current.sKey.isPressed)
-            input.y -= 1;
-
-        if (Keyboard.current.aKey.isPressed)
-            input.x -= 1;
-
-        if (Keyboard.current.dKey.isPressed)
-            input.x += 1;
-
-        movement = new Vector3(input.x, 0f, input.y).normalized;
-        isSprinting = Keyboard.current.leftShiftKey.isPressed;
-
-        if (Keyboard.current.spaceKey.wasPressedThisFrame && IsGrounded())
+        // Keeps the player attached to the ground.
+        if (isGrounded && velocity.y < 0f)
         {
-            Jump();
+            velocity.y = -2f;
         }
     }
 
-    void FixedUpdate()
+    void MovePlayer()
     {
-        Vector3 moveDirection = transform.right * movement.x + transform.forward * movement.z;
-        float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
+        // Old Input System movement input.
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
 
-        rb.linearVelocity = new Vector3(
-            moveDirection.x * currentSpeed,
-            rb.linearVelocity.y,
-            moveDirection.z * currentSpeed
-        );
+        // Prevents diagonal movement from being faster.
+        Vector3 inputDirection = new Vector3(x, 0f, z).normalized;
+
+        // Converts input direction to player-facing direction.
+        Vector3 moveDirection = transform.right * inputDirection.x + transform.forward * inputDirection.z;
+
+        // Uses sprint speed if sprinting, otherwise normal speed.
+        float currentSpeed = isSprinting ? sprintSpeed : speed;
+
+        // Moves the player horizontally.
+        controller.Move(moveDirection * currentSpeed * Time.deltaTime);
     }
-    bool IsGrounded()
+
+    void Sprint()
     {
-        // It shoots an invisible line downward from the player.
-        // If it hits something under the player, player is grounded.
-        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance);
+        // Hold Left Shift to sprint.
+        isSprinting = Input.GetKey(KeyCode.LeftShift);
     }
+
     void Jump()
     {
-        // First line resets vertical speed before jumping.
-        // Second line adds an instant upward push.
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        // Jump only once when Space is pressed and player is grounded.
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
     }
-    
+
+    void ApplyGravity()
+    {
+        // Applies gravity every frame.
+        velocity.y += gravity * Time.deltaTime;
+
+        // Moves the player vertically.
+        controller.Move(velocity * Time.deltaTime);
+    }
+
+    void CheckMovement()
+    {
+        // Checks if player position changed while grounded.
+        isMoving = lastPosition != transform.position && isGrounded;
+
+        lastPosition = transform.position;
+    }
 }
