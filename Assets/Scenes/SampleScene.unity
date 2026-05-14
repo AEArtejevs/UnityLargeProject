@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d673db2892dc49eeb3c86c1ac661e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlobalReferences
-  bulletImpactEffectPrefab: {fileID: 3671045253017454499, guid: 9688d9d91522b4bd6b44fed24bf1a753, type: 3}
+  bulletImpactEffectPrefab: {fileID: 9152216505860459498, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
 --- !u!4 &99371411
 Transform:
   m_ObjectHideFlags: 0
@@ -669,6 +669,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 4edabe54d0f224af49cc6b1d68117835, type: 2}
+    - target: {fileID: 7725550455073907413, guid: fc5a676d2c90b3d4f8a22e369c35950d, type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1155,14 +1159,14 @@ MonoBehaviour:
   isShooting: 0
   readyToShoot: 0
   shootingDelay: 0.2
-  bulletsPerBurst: 3
+  bulletsPerBurst: 5
   burstBulletsLeft: 0
   spreadIntensity: 0
   bulletPrefab: {fileID: 4320059672104028206, guid: 4b9be987653964c17a9020658dee64ab, type: 3}
   bulletSpawn: {fileID: 1100161927}
-  bulletSpeed: 5
+  bulletSpeed: 100
   bulletLifeTime: 3
-  currentShootingMode: 0
+  currentShootingMode: 2
 --- !u!1 &1185689747
 GameObject:
   m_ObjectHideFlags: 0
@@ -2314,6 +2318,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1932406567}
   m_CullTransparentMesh: 1
+--- !u!1001 &2968723005468051395
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3312051727279657968, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: EmissionModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515387731998146574, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -68.69598
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515387731998146574, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.47668
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515387731998146574, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.47858
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515387731998146574, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515387731998146574, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515387731998146574, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515387731998146574, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515387731998146574, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515387731998146574, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515387731998146574, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9152216505860459498, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
+      propertyPath: m_Name
+      value: BulletImpactStoneEffect1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8a43b97aaf316441bb8e1e60f7e54c03, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2333,3 +2398,4 @@ SceneRoots:
   - {fileID: 280508672}
   - {fileID: 1281136892}
   - {fileID: 99371411}
+  - {fileID: 2968723005468051395}
