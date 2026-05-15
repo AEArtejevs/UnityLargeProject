@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public Camera playerCamera;
+    // public Camera playerCamera;
 
     [Header("Shooting")]
 
@@ -102,8 +102,10 @@ public class Weapon : MonoBehaviour
     public Vector3 CalculateDirectionAndSpread()
     {
         // Get the direction from the camera to the mouse position
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // Ray from the center of the screen
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // This will find a main camera in the scene and will get reference to it.
+        // MainCamera tag must be assigned to the camera in the scene for this to work. 
         RaycastHit hit;
+        
         Vector3 targetPoint;
 
         if (Physics.Raycast(ray, out hit))

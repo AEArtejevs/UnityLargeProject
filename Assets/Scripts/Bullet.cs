@@ -1,71 +1,76 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class Bullet : MonoBehaviour
 {
+    [Header("Damage Settings")]
+    [SerializeField] private float damage = 25f;
+
     private void OnCollisionEnter(Collision objectWeHit)
     {
-        // Check if the bullet collides with an object tagged as "Enemy"
+        // Try to find Health on the object we hit or its parent.
+        Health health = objectWeHit.gameObject.GetComponentInParent<Health>();
+
+        if (health != null)
+        {
+            health.TakeDamage(damage);
+        }
+
+        // Enemy hit
         if (objectWeHit.gameObject.CompareTag("Enemy"))
         {
-            // Destroy the enemy object
             print("Enemy hit!");
 
             CreateBulletEffect(objectWeHit);
 
             Destroy(gameObject);
+            return;
         }
 
-        if (objectWeHit.gameObject.CompareTag("Wall"))
+        // Map hit
+        if (objectWeHit.gameObject.CompareTag("Map object"))
         {
-            // Destroy the wall object
-            print("Wall hit!");
+            print("Map object hit!");
 
             CreateBulletEffect(objectWeHit);
 
             Destroy(gameObject);
+            return;
         }
-        // Destroy the bullet after it collides with any object
-        // Destroy(gameObject);
 
-        // if (objectWeHit.gameObject.CompareTag("Bottle"))
-        // {
-        //     // Destroy the beer bottle object
-        //     print("Bottle hit!");
-
-        //     objectWeHit.gameObject.GetComponent<BeerBottle>().Shatter();
-        //     // We wont destroy the bullet, because we want it to pass through the bottle and hit the wall behind it or destroy multiple bottles in row.
-        //     // bullet will despawn after it lifespan is over.
-
-        // }
-
+        // Bottle hit
         BeerBottle bottle = objectWeHit.gameObject.GetComponentInParent<BeerBottle>();
 
         if (bottle != null)
         {
             print("Bottle hit!");
+
             bottle.Shatter();
+
+            // Bullet is not destroyed here because you wanted it to pass through bottles.
             return;
         }
+
+        // Default behavior:
+        // If bullet hits anything else, destroy it.
+        Destroy(gameObject);
     }
 
-    void CreateBulletEffect(Collision objectWeHit)
+    private void CreateBulletEffect(Collision objectWeHit)
     {
+        if (GlobalReferences.Instance == null)
+            return;
+
+        if (GlobalReferences.Instance.bulletImpactEffectPrefab == null)
+            return;
+
         ContactPoint contact = objectWeHit.contacts[0];
 
         GameObject hole = Instantiate(
             GlobalReferences.Instance.bulletImpactEffectPrefab,
             contact.point,
             Quaternion.LookRotation(contact.normal)
-
         );
 
         hole.transform.SetParent(objectWeHit.gameObject.transform);
-        // Instantiate bullet impact effect at the collision point
-        // GameObject impactEffect = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
-        // Destroy the impact effect after a short duration
-        // Destroy(impactEffect, 2f);
     }
-
-
 }
